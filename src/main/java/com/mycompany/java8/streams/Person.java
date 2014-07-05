@@ -13,10 +13,28 @@ package com.mycompany.java8.streams;
 public class Person {
  
     int age;
+     Gender gender;
+    int salary;
+
+    
+    public enum Gender {
+        MAN, VROUW;
+    };
+    
+   
+  
+    
 
     public Person(int age, String name) {
         this.age = age;
         this.name = name;
+    }
+    
+    public Person(int age, String name, Gender g, int sal) {
+        this.age = age;
+        this.name = name;
+        this.gender = g;
+        this.salary = sal;
     }
 
     
@@ -51,6 +69,24 @@ public class Person {
         
         return false;
     }
+    
+      public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public int getSalary() {
+        return salary;
+    }
+
+    public void setSalary(int salary) {
+        this.salary = salary;
+    }
+
+
 
     @Override
     public String toString() {
