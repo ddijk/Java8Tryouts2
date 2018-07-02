@@ -66,7 +66,7 @@ public class LDAPClient
 
         System.out.println("Found:"+srLdapUser);
 
-        //2) get the SID of the users primary group
+        //2) get the SID of the users primary groupByOccurence
 //        String primaryGroupSID = ldap.getPrimaryGroupSID(srLdapUser);
 
         //3) get the users Primary Group
@@ -98,7 +98,7 @@ public class LDAPClient
 
     public String findGroupBySID(DirContext ctx, String ldapSearchBase, String sid) throws NamingException {
 
-        String searchFilter = "(&(objectClass=group)(objectSid=" + sid + "))";
+        String searchFilter = "(&(objectClass=groupByOccurence)(objectSid=" + sid + "))";
 
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -110,7 +110,7 @@ public class LDAPClient
 
             //make sure there is not another item available, there should be only 1 match
             if(results.hasMoreElements()) {
-                System.err.println("Matched multiple groups for the group with SID: " + sid);
+                System.err.println("Matched multiple groups for the groupByOccurence with SID: " + sid);
                 return null;
             } else {
                 return (String)searchResult.getAttributes().get("sAMAccountName").get();
