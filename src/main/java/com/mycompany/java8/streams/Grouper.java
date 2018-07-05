@@ -2,13 +2,20 @@ package com.mycompany.java8.streams;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.reducing;
+import static java.util.stream.Collectors.toList;
 
 public class Grouper {
 
@@ -29,25 +36,49 @@ public class Grouper {
         return wordFrequency;
     }
 
+    public Map<String, String> groupByLetterToLongestWord(String input) {
+
+        Function<String, String> firstLetter = s -> s.substring(0, 1).toUpperCase();
+        Collector<String, ?, String> longestWordCollector =
+                reducing("", BinaryOperator.maxBy(Comparator.comparing(String::length)));
+        return Arrays.stream(input.split(" ")).collect(groupingBy(firstLetter, longestWordCollector));
+    }
+
     /**
      * This method splits an input sentence in its words and then creates
      * a map from this word to the length of this word.
      * @param sentence
      * @return a map from word to word length
      */
-    public Map<String, Long> groupByWordLength(String sentence) {
-     //   Collector<? super String, ?, Long> wordLength = Collectors.reducing((String s1, String s2)-> Long.valueOf(s1.length()));
+    public Map<String, Integer> groupByWordLength(String sentence) {
+        Function<String, Integer> mapper = s -> s.length();
+        BinaryOperator<Integer> binaryOp = (len1, len2) -> len2;
+        Collector<String, ?, Map<String, Integer>> byWordLength = groupingBy(Function.identity(), reducing(0, mapper, binaryOp));
 
-        Collector<? super String, ?, Long> wordLength = Collectors.maxBy(Comparator.comparingLong(String::length));
-        Collector<String, ?, Map<String, Long>> byWordLength = groupingBy(Function.identity(), wordLength);
         return Arrays.stream(sentence.split(" ")).collect(byWordLength);
     }
 
-    public Map<String, Long> groupByWordLength2(String sentence) {
-        //   Collector<? super String, ?, Long> wordLength = Collectors.reducing((String s1, String s2)-> Long.valueOf(s1.length()));
-
-        Collector<? super String, ?, Long> wordLength = Collectors.reducing();
-        Collector<String, ?, Map<String, Long>> byWordLength = groupingBy(Function.identity(), wordLength);
-        return Arrays.stream(sentence.split(" ")).collect(groupingBy(Function.identity(),  ).mapToLong(String::length).collect(byWordLength);
+    public Map<City, String> groupByCity(List<Person> people) {
+        BinaryOperator<String> binaryOp = (s1, s2) -> s1.length() > 0 ? String.join(",", s1, s2) : s2;
+        Function<Person, String> mapper = p -> p.getName();
+        Map<City, String> longestLastNameByCity =
+                people.stream().collect(groupingBy((Person p) -> p.getCity(), reducing("", mapper, binaryOp)));
+        return longestLastNameByCity;
     }
+
+    public Map<City, String> groupByCityWithMapping(List<Person> people) {
+        Map<City, String> longestLastNameByCity =
+                people.stream().collect(groupingBy((Person p) -> p.getCity(), Collectors.mapping(Person::getName, Collectors.joining(","))));
+        return longestLastNameByCity;
+    }
+
+
+    public Map<City, List<Person>> groupPersonsByCity(List<Person> people) {
+
+        Map<City, List<Person>> cityToPersonMap = people.stream().collect(groupingBy(Person::getCity));
+
+        return cityToPersonMap;
+    }
+
 }
+

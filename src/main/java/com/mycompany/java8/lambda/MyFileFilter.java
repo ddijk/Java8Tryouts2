@@ -8,7 +8,6 @@ package com.mycompany.java8.lambda;
 
 import java.io.File;
 import java.io.FileFilter;
-import org.apache.commons.io.FileUtils;
 
 /**
  *
