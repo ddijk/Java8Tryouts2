@@ -10,6 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class GrouperTest {
 
+    Grouper grouper = new Grouper();
     @Test
     public void testGroupByOccurence() {
 
@@ -18,8 +19,20 @@ public class GrouperTest {
         Map<String, Long> expectedResult = new HashMap<>();
         expectedResult.put("has", 1L);
 
-        Grouper grouper = new Grouper();
-        assertThat(grouper.groupByOccurence(sentence)).isEqualTo( expectedResult );
+        assertThat(grouper.groupByOccurence(sentence)).isEqualTo(expectedResult);
 
+    }
+
+    @Test
+    public void groupByWordToItself() {
+
+        String sentence = "de appel valt";
+
+        Map<String, String> expectedResult = new HashMap<>();
+        expectedResult.put("de", "de");
+        expectedResult.put("appel", "appel");
+
+
+        assertThat(grouper.groupByWordToItself(sentence)).isEqualTo(expectedResult);
     }
 }

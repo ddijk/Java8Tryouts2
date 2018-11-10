@@ -18,7 +18,8 @@ public class MyFileFilter {
     
     public static void main(String[] args) {
         File[] fa =  listDirectoriesJava8Way2();
-        
+
+        System.out.println("Here we go...");
          int i=0;
         for ( File f : fa ) {
             System.out.println(i++ +" "+f);
