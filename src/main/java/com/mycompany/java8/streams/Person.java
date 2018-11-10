@@ -15,15 +15,25 @@ public class Person {
     int age;
      Gender gender;
     int salary;
+    City city;
+    String lastName;
 
-    
+    public City getCity() {
+        return city;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
     public enum Gender {
         MAN, VROUW;
     };
-    
-   
-  
-    
+
+    public Person(City city, String name) {
+        this.city = city;
+        this.name = name;
+    }
 
     public Person(int age, String name) {
         this.age = age;
@@ -57,14 +67,14 @@ public class Person {
 
     @Override
     public int hashCode() {
-        return age;
+        return name.hashCode();
     }
 
     @Override
     public boolean equals(Object obj) {
         if ( obj != null && obj instanceof Person) {
             Person other = (Person) obj;
-            return age==other.age && name.equalsIgnoreCase(other.name);
+            return name.equalsIgnoreCase(other.name);
         }
         
         return false;
