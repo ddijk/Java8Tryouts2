@@ -21,7 +21,7 @@ public  class Kennel<T extends Animal> {
     public String meth(T animal) {
         return animal.sound();
     }
-    public <X extends Animal>  String meth2(X animal) {
+    public <T extends Animal>  String meth2(T animal) {
         return animal.sound();
     }
 
